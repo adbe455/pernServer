@@ -22,6 +22,4 @@ app.use(require('./middleware/validate-session'));
 app.use('/review', review);
 
 
-app.listen(process.env.PORT, function(){
-    console.log('App is listening on 3000. (PERN Project)')
-});
+app.listen(process.env.PORT, () => console.log(`app is listening port ${process.env.PORT}`))
