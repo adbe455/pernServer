@@ -3,13 +3,14 @@ let sequelize = require('../db');
 let User = sequelize.import('../models/user');
 let ReviewModel = sequelize.import('../models/review');
 
-// GET ALL ITEMS
-router.get('/', function (req, res) {
-    let userid = req.user.id;
+// GET ALL REVIEWS BY GAMEID
+router.get('/all/:gameid', function (req, res) {
+    // let userid = req.user.id;
+    let gameid = req.params.gameid
 
     ReviewModel
         .findAll({
-            where: { owner: userid }
+            where: { gameid: gameid  }
         })
         .then(
             function findAllSuccess(data) {
@@ -21,7 +22,7 @@ router.get('/', function (req, res) {
         );
 });
 
-// POST ONE ITEM
+// POST A REVIEW
 router.post('/', function (req, res) {
     let ownerid = req.user.id;
     let review = req.body.review;
@@ -52,7 +53,7 @@ router.post('/', function (req, res) {
         );
 });
 
-// GET ITEM
+// GET A REVIEW BY REVIEWID
 router.get('/:id', function(req, res) {
     let data = req.params.id;
     let userid = req.user.id;
@@ -70,7 +71,7 @@ router.get('/:id', function(req, res) {
         );
 });
 
-// DELETE ITEM
+// DELETE A REVIEW
 router.delete('/:id', function(req, res) {
     let data = req.params.id;
     let userid = req.user.id;
@@ -88,7 +89,7 @@ router.delete('/:id', function(req, res) {
         );
 });
 
-// UPDATE ITEM
+// UPDATE A REVIEW
 router.put('/:id', function(req, res) {
     let data = req.params.id;
 
