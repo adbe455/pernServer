@@ -54,13 +54,13 @@ router.post('/', function (req, res) {
 });
 
 // GET A REVIEW BY REVIEWID
-router.get('/:id', function(req, res) {
-    let data = req.params.id;
+router.get('/:gameid', function(req, res) {
+    let gameid = req.params.gameid;
     let userid = req.user.id;
 
     ReviewModel
         .findOne({
-            where: { id: data, owner: userid }
+            where: { gameid: gameid, ownerid: userid }
         }).then(
             function findOneSuccess(data) {
                 res.json(data);
