@@ -25,6 +25,8 @@ router.get('/all/:gameid', function (req, res) {
 // POST A REVIEW
 router.post('/', function (req, res) {
     let ownerid = req.user.id;
+    let firstname = req.user.firstname;
+    let lastname = req.user.lastname;
     let review = req.body.review;
     let gameid = req.body.review.gameid;
     let score = req.body.review.score;
@@ -37,6 +39,8 @@ router.post('/', function (req, res) {
             review: review,
             ownerid: ownerid,
             gameid: gameid,
+            firstname: firstname,
+            lastname: lastname,
             score: score,
             title: title,
             body: body
@@ -72,13 +76,13 @@ router.get('/:gameid', function(req, res) {
 });
 
 // DELETE A REVIEW
-router.delete('/:id', function(req, res) {
-    let data = req.params.id;
+router.delete('/:gameid', function(req, res) {
+    let gameid = req.params.gameid;
     let userid = req.user.id;
 
     ReviewModel
         .destroy({
-            where: { id: data, owner: userid }
+            where: { gameid: gameid, ownerid: userid }
         }).then(
             function deleteLogSuccess(data){
                 res.send("you removed a log");
@@ -90,23 +94,24 @@ router.delete('/:id', function(req, res) {
 });
 
 // UPDATE A REVIEW
-router.put('/:id', function(req, res) {
-    let data = req.params.id;
-
+router.put('/', function(req, res) {
+    let userid = req.user.id;
+    let review = req.body.review;
+    let gameid = req.body.review.gameid;
     let score = req.body.review.score;
     let title = req.body.review.title;
     let body = req.body.review.body;
 
     ReviewModel
-        .update(
-        {
+        .update({
+            review: review,
             score: score,
             title: title,
             body: body
         },
-        {where: {id: data}}
+            {where: {gameid: gameid, ownerid: userid}}
         ).then(
-            function updateSuccess(updatedLog) {
+            function updateSuccess(updatedReview) {
                 res.json({
                     review: review
                 });            
